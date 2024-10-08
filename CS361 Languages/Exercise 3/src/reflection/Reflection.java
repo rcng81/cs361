@@ -4,7 +4,7 @@
 package reflection;
 
 /**
- * @author Russell Ng
+ * @author Russell Ng 
  *
  */
 
@@ -17,8 +17,8 @@ package reflection;
 
 // Complete the code
 
-import circle.ColoredCircle;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 public class Reflection {
 
@@ -47,16 +47,11 @@ public class Reflection {
 		// TODO To complete
 		// You need to use the EXACT format of the output
 		// Hint: Use the method getSuperClass()
-		System.out.println("Inheritance chain: ");
-		Class<?> class1 = o.getClass();
+		Class<?> currentClass = o.getClass();
+		System.out.print("Inheritance chain:\n" + currentClass.getName());
 
-		while(class1 != null){
-			System.out.print(class1.getName());
-			class1 = class1.getSuperclass();
-
-			if(class1 != null){
-				System.out.print(" inherits from ");
-			}
+		while ((currentClass = currentClass.getSuperclass()) != null) {
+			System.out.print(" inherits from " + currentClass.getName());
 		}
 		System.out.println();
 	}
@@ -75,19 +70,24 @@ public class Reflection {
 		// TODO To complete
 		// Print each method on one line
 		// Use this EXACT format
-		System.out.println("Methods: ");
-		for(Method method : m){
-			StringBuilder methodSignature = new StringBuilder();
-			methodSignature.append(method.getName()).append(": ");
-			Class<?>[] parameterTypes = method.getParameterTypes();
-			for(int i = 0; i < parameterTypes.length; i++){
-				if(i < parameterTypes.length - 1){
-					methodSignature.append(" ");
+		System.out.println("\nMethods:");
+		for (Method method : m) {
+			// Print method name
+			System.out.print(method.getName() + ": ");
+			
+			// Print parameters
+			Parameter[] parameters = method.getParameters();
+			for (int i = 0; i < parameters.length; i++) {
+				System.out.print(parameters[i].getName() + ": " + parameters[i].getType().getSimpleName());
+				if (i < parameters.length - 1) {
+					System.out.print(" ");
 				}
 			}
-			methodSignature.append(" -> ").append(method.getReturnType().getSimpleName());
-			System.out.println(methodSignature.toString());
+			
+			// Print return type
+			System.out.println(" -> " + method.getReturnType().getSimpleName());
 		}
+		
 		System.out.println("\n");
 	}
 
@@ -111,12 +111,14 @@ public class Reflection {
 		r.correspondingClass(str);
 		r.inheritanceChain(str);
 		r.listMethods(str);
+
 		
 		// Demonstration of the methods on an objet of type ColoredCircle
 		// TODO To complete		
-		ColoredCircle coloredCircle = new ColoredCircle();
-        	r.correspondingClass(coloredCircle);
-        	r.inheritanceChain(coloredCircle);
-        	r.listMethods(coloredCircle);
+		circle.ColoredCircle coloredCircle = new circle.ColoredCircle();
+		r.correspondingClass(coloredCircle);
+		r.inheritanceChain(coloredCircle);
+		r.listMethods(coloredCircle);
 	}
+
 }
